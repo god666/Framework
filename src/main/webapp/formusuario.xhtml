@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+<head>
+<title>Insert title here</title>
+</head>
+<body>
+
+	<h:form>
+	Nome:
+	<h:inputText value="#{usuarioController.usuario.nome}" />
+	Login:
+	<h:inputText value="#{usuarioController.usuario.login}" />
+	Senha:
+	<h:inputText value="#{usuarioController.usuario.senha}" />
+
+		<h:commandButton actionListener="#{usuarioController.salvar()}"
+			value="Salvar" />
+
+	</h:form>
+
+	<h:form>
+	<h:messages />
+		<h:dataTable value="#{usuarioController.listaUsuario}"
+			var="varUsuario" border="1">
+			<f:facet name="header">Lista de Usuários</f:facet>
+
+			<h:column>
+				<f:facet name="header">Nome</f:facet>
+				#{varUsuario.nome}
+			</h:column>
+			<h:column>
+				<f:facet name="header">Login</f:facet>
+				#{varUsuario.login}
+			</h:column>
+			<h:column>
+				<f:facet name="header">Senha</f:facet>
+				#{varUsuario.senha}
+			</h:column>
+
+			<h:column>
+				<h:commandButton
+					actionListener="#{usuarioController.excluir(varUsuario)}"
+					value="Excluir" />
+			</h:column>
+			<h:column>
+				<h:commandButton
+					actionListener="#{usuarioController.editar(varUsuario)}"
+					value="Editar" />
+			</h:column>
+
+		</h:dataTable>
+	</h:form>
+</body>
+</html>

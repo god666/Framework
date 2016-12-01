@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd">
+
+	<!-- A tag bean pode ser substituída pela Annotations de CONTEXTO do Spring. 
+		Nesse caso foi adicionando manualmente porque estamos trabalhando com uma 
+		classe importada. Adicionando manualmente a classe BasicDataSource da library 
+		no CONTEXTO do spring. O id é instância da classe BasicDataSource. Algo equivalente 
+		a: BasicDataSource bataSource = new BasicDataSource -->
+	<bean id="basicDataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<!-- O property é equivalente a: dataSource.setDriverClassName("org.postgresql.Driver") -->
+		<property name="driverClassName" value="org.postegresql.Driver"></property>
+		<property name="username" value="postgres" />
+		<property name="password" value="root" />
+		<property name="url" value="jdbc:postgresql://localhost:5432/framework"></property>
+	</bean>
+
+	<bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<!-- Esta property pode ser substituída por: <property name="dataSource"> 
+			<bean id="basicDataSource" class="org.apache.commons.dbcp.BasicDataSource"> 
+			<property name="driverClassName" value="org.postegresql.Driver"></property> 
+			<property name="username" value="postgres" /> <property name="password" value="root"/> 
+			<property name="url" value="jdbc:postgresql://localhost:5432/framework"></property> 
+			</bean> </property> -->
+		<property name="dataSource" ref="basicDataSource" />
+		<!-- Mesmo nome encontrado no persistenceUnit do arquivo persistence.xml -->
+		<property name="persistenceUnitName" value="framework" />
+		<!-- Por que foi declarado um objeto dentro de outro? Porque no caso do 
+			jpaVendorAdapter não será reutilizado, como no caso de basicDataSource -->
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+				<!-- Cria a tabela automaticamente -->
+				<property name="generateDdl" value="true"/>
+				<property name="showSql" value="true"/>
+				<property name="databasePlatform" value="PostegreSQLDialect"/>
+			</bean>
+			<!-- VALE RESSALTAR são as mesmas configurações do persistence.xml -->
+		</property>
+
+	</bean>
+
+	<bean id="usuario" class="br.com.framework.entidade.Usuario">
+		<property name="nome" value="Bean" />
+		<property name="login" value="bean" />
+		<property name="senha" value="123" />
+	</bean>
+</beans>
